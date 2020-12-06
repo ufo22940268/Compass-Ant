@@ -1,77 +1,56 @@
-// Copyright (c) 2010 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+class PullRequest {
+    branch;
+    user;
+    jira;
+    description;
 
-// A generic onclick callback function.
-function genericOnClick(info, tab) {
-    console.log("item " + info.menuItemId + " was clicked");
-    console.log("info: " + JSON.stringify(info));
-    console.log("tab: " + JSON.stringify(tab));
+    constructor(branch) {
+        this.branch = branch;
+        const [p1, p2] = branch.split('/');
+        this.user = p1;
+        const jiraPart = p2.split('-');
+        this.jira = jiraPart.slice(0, 2).join('-');
+        this.description = jiraPart.slice(2).join('-');
+    }
 }
 
-// Create one test item for each context type.
-var contexts = ["page", "selection", "link", "editable", "image", "video",
-    "audio"];
-for (var i = 0; i < contexts.length; i++) {
-    var context = contexts[i];
-    var title = "Test '" + context + "' menu item";
-    var id = chrome.contextMenus.create({
-        "title": title, "contexts": [context],
-        "onclick": genericOnClick
-    });
-    console.log("'" + context + "' item:" + id);
+let pr;
+
+function copyTextToClipboard(text) {
+    //Create a textbox field where we can insert text to.
+    var copyFrom = document.createElement("textarea");
+
+    //Set the text content to be the text you wished to copy.
+    copyFrom.textContent = text;
+
+    //Append the textbox field into the body as a child.
+    //"execCommand()" only works when there exists selected text, and the text is inside
+    //document.body (meaning the text is part of a valid rendered HTML element).
+    document.body.appendChild(copyFrom);
+
+    //Select all the text!
+    copyFrom.select();
+
+    //Execute command
+    document.execCommand('copy');
+
+    //(Optional) De-select the text using blur().
+    copyFrom.blur();
+
+    //Remove the textbox field from the document.body, so no other JavaScript nor
+    //other elements can get access to this.
+    document.body.removeChild(copyFrom);
 }
 
-
-// Create a parent item and two children.
-var parent = chrome.contextMenus.create({"title": "Test parent itema"});
-var child1 = chrome.contextMenus.create(
-    {"title": "Child 1", "parentId": parent, "onclick": genericOnClick});
-var child2 = chrome.contextMenus.create(
-    {"title": "Child 2", "parentId": parent, "onclick": genericOnClick});
-console.log("parent:" + parent + " child1:" + child1 + " child2:" + child2);
-
-
-// Create some radio items.
-function radioOnClick(info, tab) {
-    console.log("radio item " + info.menuItemId +
-        " was clicked (previous checked state was " +
-        info.wasChecked + ")");
+function copyBranch() {
+    copyTextToClipboard(pr.branch);
 }
 
-var radio1 = chrome.contextMenus.create({
-    "title": "Radio 1", "type": "radio",
-    "onclick": radioOnClick
+chrome.contextMenus.create({
+    "title": "Copy branch",
+    "onclick": copyBranch
 });
-var radio2 = chrome.contextMenus.create({
-    "title": "Radio 2", "type": "radio",
-    "onclick": radioOnClick
+
+chrome.runtime.onMessage.addListener(function (message) {
+    pr = new PullRequest(message.branch);
 });
-console.log("radio1:" + radio1 + " radio2:" + radio2);
-
-
-// Create some checkbox items.
-function checkboxOnClick(info, tab) {
-    console.log(JSON.stringify(info));
-    console.log("checkbox item " + info.menuItemId +
-        " was clicked, state is now: " + info.checked +
-        "(previous state was " + info.wasChecked + ")");
-
-}
-
-var checkbox1 = chrome.contextMenus.create(
-    {"title": "Checkbox1", "type": "checkbox", "onclick": checkboxOnClick});
-var checkbox2 = chrome.contextMenus.create(
-    {"title": "Checkbox2", "type": "checkbox", "onclick": checkboxOnClick});
-console.log("checkbox1:" + checkbox1 + " checkbox2:" + checkbox2);
-
-
-// Intentionally create an invalid item, to show off error checking in the
-// create callback.
-console.log("About to try creating an invalid item - an error about " +
-    "item 999 should show up");
-// chrome.contextMenus.create({"title": "Oops", "parentId":999}, function() {
-//   if (chrome.extension.lastError) {
-//     console.log("Got expected error: " + chrome.extension.lastError.message);
-//   }
-// });

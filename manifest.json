@@ -2,9 +2,24 @@
   "name": "Compass Ant",
   "description": "Extract some useful information from jira and github",
   "version": "0.1",
-  "permissions": ["contextMenus"],
+  "permissions": [
+    "contextMenus",
+    "activeTab"
+  ],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+      "background.js"
+    ]
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.github.com/*"
+      ],
+      "js": [
+        "contentScript.js"
+      ]
+    }
+  ],
   "manifest_version": 2
 }
