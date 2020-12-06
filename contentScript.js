@@ -9,4 +9,5 @@ function extractBranch() {
 }
 
 let branch = extractBranch();
-chrome.runtime.sendMessage({branch});
+let url = document.documentURI;
+chrome.runtime.sendMessage({branch, url});

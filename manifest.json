@@ -11,10 +11,16 @@
       "background.js"
     ]
   },
+  "icons": {
+    "16": "art/pikmin.png",
+    "32": "art/pikmin@2x.png",
+    "48": "art/pikmin@3x.png",
+    "128": "art/pikmin@full.png"
+  },
   "content_scripts": [
     {
       "matches": [
-        "https://*.github.com/*"
+        "https://*.github.com/UrbanCompass/uc-frontend/pull/*"
       ],
       "js": [
         "contentScript.js"
