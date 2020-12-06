@@ -20,14 +20,12 @@ function extractDemobox() {
     for (const comment of document.querySelectorAll('.timeline-comment')) {
         for (const h2 of comment.querySelectorAll('h2')) {
             if (h2.innerText === 'Demobox Link') {
-                let url = h2.parentElement.querySelector('p').innerText;
-                setDemoboxLink(url);
-                let date = new Date(comment.querySelector('relative-time').getAttribute('datetime'));
-                demoboxDate = date;
+                setDemoboxLink(h2.parentElement.querySelector('p').innerText);
+                demoboxDate = comment.querySelector('relative-time').innerText;
             }
         }
     }
 }
 
 extractDemobox();
-chrome.runtime.sendMessage({[document.documentURI]: {branch, url, demoboxLink, demoboxDate}});
+chrome.runtime.sendMessage({branch, url, demoboxLink, demoboxDate});

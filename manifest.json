@@ -4,14 +4,16 @@
   "version": "0.2",
   "permissions": [
     "contextMenus",
-    "activeTab"
+    "activeTab",
+    "tabs"
   ],
   "background": {
     "scripts": [
       "background/pullRequest.js",
       "background/demoBox.js",
       "background/menu.js",
-      "background/util.js"
+      "background/util.js",
+      "background/event.js"
     ]
   },
   "icons": {

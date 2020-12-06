@@ -40,19 +40,16 @@ let createMenus = function () {
         "onclick": copyBranch,
         "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
     });
-    chrome.contextMenus.create({
-        title: 'Copy demoBox',
-        "onclick": copyDemoBox,
-        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
-    });
 };
 
 createMenus();
 
-chrome.runtime.onMessage.addListener(function (message) {
-    for (const [url, content] of Object.entries(message)) {
-        const pr = new PullRequest(content.branch);
-        const demoBox = new DemoBox(content.demoboxLink, content.demoboxDate);
-        store[url] = {pr, demoBox};
-    }
-});
+function updateDemoBox(demoBox) {
+    if (demoBoxesMenuItem) chrome.contextMenus.remove(demoBoxesMenuItem);
+    demoBoxesMenuItem = chrome.contextMenus.create({
+        title: `Copy demoBox (${demoBox.date})`,
+        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*'],
+        "onclick": copyDemoBox,
+    });
+}
+
