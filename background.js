@@ -95,11 +95,6 @@ function copyPipelineName() {
 
 let createMenus = function () {
     chrome.contextMenus.create({
-        "title": "Copy branch",
-        "onclick": copyBranch,
-        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
-    });
-    chrome.contextMenus.create({
         "title": "Copy pipeline name",
         "onclick": copyPipelineName,
         "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
@@ -107,6 +102,11 @@ let createMenus = function () {
     chrome.contextMenus.create({
         "title": "Copy application name",
         "onclick": copyApplicationName,
+        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
+    });
+    chrome.contextMenus.create({
+        "title": "Copy branch",
+        "onclick": copyBranch,
         "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
     });
 };
