@@ -109,6 +109,12 @@ let createMenus = function () {
         "onclick": copyBranch,
         "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
     });
+
+    chrome.contextMenus.create({
+        "title": "Copy demobox",
+        "onclick": copyBranch,
+        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
+    });
 };
 
 createMenus();
