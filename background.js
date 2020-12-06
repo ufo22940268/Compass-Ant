@@ -83,8 +83,7 @@ function clearPastBoard() {
 }
 
 function copyBranch() {
-    clearPastBoard();
-    copyTextToClipboard(pr.branch);
+    clearAndCopyTextToClipboard(pr.branch);
 }
 
 
@@ -93,18 +92,22 @@ function copyPipelineName() {
 }
 
 
+
 let createMenus = function () {
     chrome.contextMenus.create({
         "title": "Copy branch",
-        "onclick": copyBranch
+        "onclick": copyBranch,
+        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
     });
     chrome.contextMenus.create({
         "title": "Copy pipeline name",
-        "onclick": copyPipelineName
+        "onclick": copyPipelineName,
+        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
     });
     chrome.contextMenus.create({
         "title": "Copy application name",
-        "onclick": copyApplicationName
+        "onclick": copyApplicationName,
+        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
     });
 };
 
@@ -117,8 +120,5 @@ function copyApplicationName() {
 chrome.runtime.onMessage.addListener(function (message) {
     pr = new PullRequest(message.branch);
 
-    //TODO Show menus only in github pull request page.
     // let isValid = pr && message.url && message.url.includes('github.com/UrbanCompass/uc-frontend/pull');
-    // if (isValid) {
-    // }
 });
