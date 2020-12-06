@@ -13,7 +13,7 @@ function extractBranch() {
 }
 
 function setDemoboxLink(url) {
-    demoboxLink = `https:${url}/app/agent-search`;
+    demoboxLink = `https://${url}/app/agent-search`;
 }
 
 function extractDemobox() {

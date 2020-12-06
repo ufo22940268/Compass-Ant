@@ -19,6 +19,11 @@ function copyApplicationName({pageUrl}) {
     clearAndCopyTextToClipboard(store[pageUrl].pr.applicationName);
 }
 
+function copyDemoBox({pageUrl}) {
+    let demoBox = store[pageUrl].demoBox;
+    clearAndCopyTextToClipboard(demoBox.link);
+}
+
 let createMenus = function () {
     chrome.contextMenus.create({
         "title": "Copy pipeline name",
@@ -35,14 +40,11 @@ let createMenus = function () {
         "onclick": copyBranch,
         "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
     });
-
     chrome.contextMenus.create({
-        "title": "Copy demobox",
-        "onclick": copyBranch,
+        title: 'Copy demoBox',
+        "onclick": copyDemoBox,
         "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
     });
-
-    demoBoxesMenuItem = chrome.contextMenus.create({title: 'DemoBoxes'});
 };
 
 createMenus();
