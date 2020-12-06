@@ -30,4 +30,4 @@ function extractDemobox() {
 }
 
 extractDemobox();
-chrome.runtime.sendMessage({branch, url, demoboxLink, demoboxDate});
+chrome.runtime.sendMessage({[document.documentURI]: {branch, url, demoboxLink, demoboxDate}});

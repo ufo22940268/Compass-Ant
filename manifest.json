@@ -8,6 +8,8 @@
   ],
   "background": {
     "scripts": [
+      "background/pullRequest.js",
+      "background/demoBox.js",
       "background/menu.js",
       "background/util.js"
     ]

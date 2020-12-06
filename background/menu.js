@@ -1,64 +1,22 @@
-class PullRequest {
-    branch;
-    user;
-    jira;
-    description;
+let demoBoxesMenuItem;
 
-    constructor(branch) {
-        this.branch = branch;
-        const [p1, p2] = branch.split('/');
-        this.user = p1.replaceAll('.', '');
-        const jiraPart = p2.split('-');
-        this.jira = jiraPart.slice(0, 2).join('-');
-        this.description = jiraPart.slice(2).join('-');
-    }
-
-    formatDate() {
-        const today = new Date();
-        let dd = today.getDate();
-        let mm = today.getMonth() + 1; //January is 0!
-        let hh = today.getHours();
-        if (dd < 10) {
-            dd = '0' + dd;
-        }
-        if (mm < 10) {
-            mm = '0' + mm;
-        }
-
-        if (hh < 10) {
-            hh = '0' + hh;
-        }
-        return `${mm}${dd}h${hh}`;
-    }
-
-    get pipelineName() {
-        return `${this.formatDate()}-${this.user}-${this.jira}`.toLowerCase();
-    }
-
-    get applicationName() {
-        const branch = this.branch.toLowerCase();
-        const config = {
-            'mlsti': 'search-mls-filters-modal',
-            'star': 'search-mls-filters-modal',
-        };
-        return Object.entries(config).filter(([keyword, _]) => branch.includes(keyword + '-')).map(t => t[1]) || 'unknown';
-    }
-}
-
-let pr;
-
+let store = {};
 
 function clearPastBoard() {
     copyTextToClipboard('');
 }
 
-function copyBranch() {
-    clearAndCopyTextToClipboard(pr.branch);
+function copyBranch({pageUrl}) {
+    clearAndCopyTextToClipboard(store[pageUrl].pr.branch);
 }
 
 
-function copyPipelineName() {
-    clearAndCopyTextToClipboard(pr.pipelineName);
+function copyPipelineName({pageUrl}) {
+    clearAndCopyTextToClipboard(store[pageUrl].pr.pipelineName);
+}
+
+function copyApplicationName({pageUrl}) {
+    clearAndCopyTextToClipboard(store[pageUrl].pr.applicationName);
 }
 
 let createMenus = function () {
@@ -83,16 +41,16 @@ let createMenus = function () {
         "onclick": copyBranch,
         "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
     });
+
+    demoBoxesMenuItem = chrome.contextMenus.create({title: 'DemoBoxes'});
 };
 
 createMenus();
 
-function copyApplicationName() {
-    clearAndCopyTextToClipboard(pr.applicationName);
-}
-
 chrome.runtime.onMessage.addListener(function (message) {
-    pr = new PullRequest(message.branch);
-
-    // let isValid = pr && message.url && message.url.includes('github.com/UrbanCompass/uc-frontend/pull');
+    for (const [url, content] of Object.entries(message)) {
+        const pr = new PullRequest(content.branch);
+        const demoBox = new DemoBox(content.demoboxLink, content.demoboxDate);
+        store[url] = {pr, demoBox};
+    }
 });
