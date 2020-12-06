@@ -1,5 +1,3 @@
-let demoBoxesMenuItem;
-
 let store = {};
 
 function clearPastBoard() {
@@ -19,9 +17,13 @@ function copyApplicationName({pageUrl}) {
     clearAndCopyTextToClipboard(store[pageUrl].pr.applicationName);
 }
 
-function copyDemoBox({pageUrl}) {
-    let demoBox = store[pageUrl].demoBox;
-    clearAndCopyTextToClipboard(demoBox.link);
+function requestDemoBox({pageUrl}) {
+    clearPastBoard();
+    if (!store[pageUrl]) {
+        alertInPage('DemoBox not loaded!');
+    } else {
+        clearAndCopyTextToClipboard(store[pageUrl].demoBox.link);
+    }
 }
 
 let createMenus = function () {
@@ -40,16 +42,13 @@ let createMenus = function () {
         "onclick": copyBranch,
         "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
     });
+
+    chrome.contextMenus.create({
+        title: `Copy demoBox`,
+        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*'],
+        "onclick": requestDemoBox,
+    });
 };
 
 createMenus();
-
-function updateDemoBox(demoBox) {
-    if (demoBoxesMenuItem) chrome.contextMenus.remove(demoBoxesMenuItem);
-    demoBoxesMenuItem = chrome.contextMenus.create({
-        title: `Copy demoBox (${demoBox.date})`,
-        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*'],
-        "onclick": copyDemoBox,
-    });
-}
 

@@ -18,7 +18,7 @@ function setDemoboxLink(url) {
 
 function extractDemobox() {
     for (const comment of document.querySelectorAll('.timeline-comment')) {
-        for (const h2 of comment.querySelectorAll('h2')) {
+        for (const h2 of Array.from(comment.querySelectorAll('h2')).reverse()) {
             if (h2.innerText === 'Demobox Link') {
                 setDemoboxLink(h2.parentElement.querySelector('p').innerText);
                 demoboxDate = comment.querySelector('relative-time').innerText;
@@ -29,3 +29,10 @@ function extractDemobox() {
 
 extractDemobox();
 chrome.runtime.sendMessage({branch, url, demoboxLink, demoboxDate});
+
+chrome.runtime.onMessage.addListener(function (message) {
+    switch(message.type) {
+        case 'alert':
+            alert(message.msg);
+    }
+});

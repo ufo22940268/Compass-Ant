@@ -4,8 +4,7 @@
   "version": "0.2",
   "permissions": [
     "contextMenus",
-    "activeTab",
-    "tabs"
+    "activeTab"
   ],
   "background": {
     "scripts": [

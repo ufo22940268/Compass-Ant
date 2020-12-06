@@ -29,6 +29,13 @@ function copyTextToClipboard(text) {
     document.body.removeChild(copyFrom);
 }
 
+function alertInPage(msg) {
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {type: 'alert', msg}, function (response) {
+        });
+    });
+}
+
 function clearAndCopyTextToClipboard(text) {
     clearPastBoard();
     copyTextToClipboard(text);
