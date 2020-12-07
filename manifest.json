@@ -1,7 +1,7 @@
 {
   "name": "Compass Ant",
   "description": "Extract some useful information from jira and github",
-  "version": "0.2",
+  "version": "1.0",
   "permissions": [
     "contextMenus",
     "activeTab"
