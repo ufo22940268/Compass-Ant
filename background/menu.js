@@ -19,14 +19,7 @@ function copyApplicationName({pageUrl}) {
 
 function requestDemoBox({pageUrl}) {
     clearPastBoard();
-    if (!store[pageUrl]) {
-        alertInPage('DemoBox not loaded!');
-    } else {
-        let demoBox = store[pageUrl].demoBox;
-        clearAndCopyTextToClipboard(demoBox.link);
-        alertInPage(`Copy success! 
-DemoBox generated time: ${demoBox.date} `);
-    }
+    sendMessageInBackground({type: 'getDemoBox'});
 }
 
 

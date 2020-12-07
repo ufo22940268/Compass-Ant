@@ -21,18 +21,31 @@ function extractDemobox() {
         for (const h2 of Array.from(comment.querySelectorAll('h2')).reverse()) {
             if (h2.innerText === 'Demobox Link') {
                 setDemoboxLink(h2.parentElement.querySelector('p').innerText);
-                demoboxDate = comment.querySelector('relative-time').innerText;
+                let dropDownTime = comment.querySelector('.lh-condensed relative-time');
+                if (dropDownTime) {
+                    demoboxDate = dropDownTime.innerText;
+                } else {
+                    demoboxDate = comment.querySelector('relative-time').innerText;
+                }
             }
         }
     }
 }
 
-extractDemobox();
-chrome.runtime.sendMessage({branch, url, demoboxLink, demoboxDate});
+chrome.runtime.sendMessage({branch, url, type: 'pipeline'});
 
 chrome.runtime.onMessage.addListener(function (message) {
     switch (message.type) {
         case 'alert':
             alert(message.msg);
+        case 'getDemoBox':
+            extractDemobox();
+            chrome.runtime.sendMessage({demoboxLink, demoboxDate, type: 'demoBox'});
+            if (!demoboxLink || !demoboxDate) {
+                alert('DemoBox not loaded!');
+            } else {
+                alert(`Copy success! 
+DemoBox generated time: ${demoboxDate} `);
+            }
     }
 });

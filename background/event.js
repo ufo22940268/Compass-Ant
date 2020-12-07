@@ -3,9 +3,15 @@
  */
 "use strict";
 chrome.runtime.onMessage.addListener(function (message) {
-    const {url, branch, demoboxLink, demoboxDate} = message;
-    const pr = new PullRequest(branch);
-    const demoBox = new DemoBox(demoboxLink, demoboxDate);
-    store[url] = {pr, demoBox};
+    const {type, url} = message;
+    if (type === 'pipeline') {
+        const {branch} = message;
+        store[url].pr = new PullRequest(branch);
+    } else if (type === 'demoBox') {
+        const {demoboxLink} = message;
+        if (demoboxLink) {
+            clearAndCopyTextToClipboard(demoboxLink);
+        }
+    }
 });
 

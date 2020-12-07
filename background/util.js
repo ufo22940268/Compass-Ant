@@ -29,11 +29,15 @@ function copyTextToClipboard(text) {
     document.body.removeChild(copyFrom);
 }
 
-function alertInPage(msg) {
+function sendMessageInBackground(content) {
     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {type: 'alert', msg}, function (response) {
+        chrome.tabs.sendMessage(tabs[0].id, content, function (response) {
         });
     });
+}
+
+function alertInPage(msg) {
+    sendMessageInBackground({type: 'alert', msg});
 }
 
 function clearAndCopyTextToClipboard(text) {
