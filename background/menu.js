@@ -29,27 +29,34 @@ DemoBox generated time: ${demoBox.date} `);
     }
 }
 
+
 let createMenus = function () {
+    const contexts = ["page", "selection", "link", "editable", "image", "video",
+        "audio"];
+    const menuDefaultOptions = {
+        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*'],
+        contexts
+    };
     chrome.contextMenus.create({
         "title": "Copy pipeline name",
         "onclick": copyPipelineName,
-        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
+        ...menuDefaultOptions
     });
     chrome.contextMenus.create({
         "title": "Copy application name",
         "onclick": copyApplicationName,
-        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
+        ...menuDefaultOptions
     });
     chrome.contextMenus.create({
         "title": "Copy branch",
         "onclick": copyBranch,
-        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*']
+        ...menuDefaultOptions
     });
 
     chrome.contextMenus.create({
         title: `Copy demoBox`,
-        "documentUrlPatterns": ['https://*.github.com/UrbanCompass/uc-frontend/pull/*'],
         "onclick": requestDemoBox,
+        ...menuDefaultOptions
     });
 };
 
