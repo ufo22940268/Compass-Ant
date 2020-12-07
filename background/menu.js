@@ -22,7 +22,10 @@ function requestDemoBox({pageUrl}) {
     if (!store[pageUrl]) {
         alertInPage('DemoBox not loaded!');
     } else {
-        clearAndCopyTextToClipboard(store[pageUrl].demoBox.link);
+        let demoBox = store[pageUrl].demoBox;
+        clearAndCopyTextToClipboard(demoBox.link);
+        alertInPage(`Copy success! 
+DemoBox generated time: ${demoBox.date} `);
     }
 }
 

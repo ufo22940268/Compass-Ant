@@ -31,7 +31,7 @@ extractDemobox();
 chrome.runtime.sendMessage({branch, url, demoboxLink, demoboxDate});
 
 chrome.runtime.onMessage.addListener(function (message) {
-    switch(message.type) {
+    switch (message.type) {
         case 'alert':
             alert(message.msg);
     }
