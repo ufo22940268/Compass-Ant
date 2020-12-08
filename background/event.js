@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener(function (message) {
     const {type, url} = message;
     if (type === 'pipeline') {
         const {branch} = message;
-        store[url].pr = new PullRequest(branch);
+        store[url] = {pr: new PullRequest(branch)};
     } else if (type === 'demoBox') {
         const {demoboxLink} = message;
         if (demoboxLink) {
